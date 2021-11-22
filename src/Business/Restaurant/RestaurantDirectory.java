@@ -5,10 +5,60 @@
  */
 package Business.Restaurant;
 
+import Business.UserAccount.UserAccount;
+import Business.order.FinalOrder;
+import java.util.ArrayList;
+
 /**
  *
  * @author harold
  */
 public class RestaurantDirectory {
+    ArrayList<Restaurant> restaurantList = new ArrayList<Restaurant>();
+
+    public ArrayList<Restaurant> getRestaurantList() {
+        return restaurantList;
+    }
+
+    public void setRestaurantList(ArrayList<Restaurant> restaurantList) {
+        this.restaurantList = restaurantList;
+    }
+    
+    public Restaurant getResto(UserAccount ua)
+    {
+        for(Restaurant r: restaurantList)
+        {
+            if(ua.getUsername().equals(r.getUserAccount().getUsername()))
+                return r;
+        }
+        
+        return null; 
+    }
+
+    public void addResto(Restaurant resto) {
+        restaurantList.add(resto);
+    }
+    
+    int orderIdGeneration = 100;
+    public int generateOrderId()
+    {
+        orderIdGeneration++;
+        return orderIdGeneration;
+    }
+    
+    public FinalOrder getOrder(String id)
+    {
+        for(Restaurant r: restaurantList)
+        {
+            ArrayList<FinalOrder> acceptedOrders = r.getAcceptedOrders();
+        for(FinalOrder f: acceptedOrders)
+        {
+            if(id.equals(f.getOrderId()))
+                return f;
+        }
+        }
+        return null;
+    }
+    
     
 }

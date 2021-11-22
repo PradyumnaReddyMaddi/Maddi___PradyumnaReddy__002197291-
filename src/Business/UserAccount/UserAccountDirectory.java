@@ -32,6 +32,15 @@ public class UserAccountDirectory {
         return null;
     }
     
+    public boolean authenticateUserLogin(String username,String password)
+    {
+        for (UserAccount ua : userAccountList)
+            if (ua.getUsername().equals(username) && ua.getPassword().equals(password)){
+                return true;
+            }
+        return false;
+    }
+    
     public UserAccount createUserAccount(String username, String password, Employee employee, Role role){
         UserAccount userAccount = new UserAccount();
         userAccount.setUsername(username);
@@ -41,7 +50,16 @@ public class UserAccountDirectory {
         userAccountList.add(userAccount);
         return userAccount;
     }
-    
+    public UserAccount getUserAccount(String username) {
+        for(UserAccount ua: userAccountList)
+        {
+            if(ua.getUsername().equals(username))
+            {
+                return ua;
+            }
+        }
+        return null;
+    }
     public boolean checkIfUsernameIsUnique(String username){
         for (UserAccount ua : userAccountList){
             if (ua.getUsername().equals(username))
@@ -49,4 +67,5 @@ public class UserAccountDirectory {
         }
         return true;
     }
+    
 }

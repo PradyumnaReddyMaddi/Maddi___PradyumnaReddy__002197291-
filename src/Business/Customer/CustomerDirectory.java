@@ -5,10 +5,37 @@
  */
 package Business.Customer;
 
+import Business.UserAccount.UserAccount;
+import java.util.ArrayList;
+
 /**
  *
  * @author harold
  */
 public class CustomerDirectory {
+        ArrayList<Customer> customerList = new ArrayList<Customer>();
+
+    public ArrayList<Customer> getCustomerList() {
+        return customerList;
+    }
+
+    public void setCustomerList(ArrayList<Customer> customerList) {
+        this.customerList = customerList;
+    }
     
+    public Customer getCustoo(UserAccount ua)
+    {
+        for(Customer c: customerList)
+        {
+            if(ua.getUsername().equals(c.getUa().getUsername()))
+                return c;
+        }
+        
+        return null; 
+    }
+    
+    public void addCusto(Customer c)
+    {
+        this.customerList.add(c);
+    }
 }

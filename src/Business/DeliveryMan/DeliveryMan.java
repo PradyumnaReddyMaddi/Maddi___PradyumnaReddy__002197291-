@@ -5,10 +5,59 @@
  */
 package Business.DeliveryMan;
 
+import Business.UserAccount.UserAccount;
+import Business.order.FinalOrder;
+import java.util.ArrayList;
+
 /**
  *
  * @author harold
  */
 public class DeliveryMan {
+     String name;
+    String status;
+    UserAccount ua;
+
+    public UserAccount getUa() {
+        return ua;
+    }
+
+    public void setUa(UserAccount ua) {
+        this.ua = ua;
+    }
     
+    public DeliveryMan(UserAccount ua)
+    {
+        this.ua = ua;
+        this.name = ua.getUsername();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public ArrayList<FinalOrder> getDeliveredOrders() {
+        return deliveredOrders;
+    }
+
+    public void setDeliveredOrders(ArrayList<FinalOrder> deliveredOrders) {
+        this.deliveredOrders = deliveredOrders;
+    }
+    ArrayList<FinalOrder> deliveredOrders = new ArrayList<FinalOrder>();
+    public void addDeliveredOrder(FinalOrder f)
+    {
+        deliveredOrders.add(f);
+    }
 }

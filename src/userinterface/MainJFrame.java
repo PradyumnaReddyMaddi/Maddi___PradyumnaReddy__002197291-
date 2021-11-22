@@ -8,10 +8,17 @@ import Business.EcoSystem;
 import Business.DB4OUtil.DB4OUtil;
 
 import Business.Organization;
+import Business.Restaurant.RestaurantDirectory;
 import Business.UserAccount.UserAccount;
+import Business.UserAccount.UserAccountDirectory;
 import java.awt.CardLayout;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import userinterface.CustomerRole.CustomerRestaurantOrder;
+import userinterface.DeliveryManRole.OrdersDelivery;
+import userinterface.RestaurantAdminRole.AdminWorkAreaJPanel;
+import userinterface.SystemAdminWorkArea.SystemAdminWorkAreaJPanel;
 
 /**
  *
@@ -24,11 +31,14 @@ public class MainJFrame extends javax.swing.JFrame {
      */
     private EcoSystem system;
     private DB4OUtil dB4OUtil = DB4OUtil.getInstance();
+    UserAccount ua;
+    RestaurantDirectory rd;
 
     public MainJFrame() {
         initComponents();
         system = dB4OUtil.retrieveSystem();
         this.setSize(1680, 1050);
+       
     }
 
     /**
@@ -123,7 +133,73 @@ public class MainJFrame extends javax.swing.JFrame {
 
     private void loginJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginJButtonActionPerformed
         // Get user name
+       String username = userNameJTextField.getText();
+        String password = passwordField.getText();
+        UserAccountDirectory userDirectory = system.getUserAccountDirectory();
        
+        if(userDirectory.authenticateUserLogin(username, password))
+        {
+        ArrayList<UserAccount> usersList = userDirectory.getUserAccountList();
+        
+        this.ua = userDirectory.authenticateUser(username, password);
+        
+        if(ua.getRole().toString().equals("Business.Role.SystemAdminRole"))
+        {
+            logoutJButton.setEnabled(true); 
+            userNameJTextField.setEnabled(false);
+            passwordField.setEnabled(false);
+            loginJButton.setEnabled(false);
+            
+            SystemAdminWorkAreaJPanel sa = new SystemAdminWorkAreaJPanel(container, system);
+            container.add("Sysadmin",sa);
+            CardLayout crdLyt = (CardLayout) container.getLayout();
+            crdLyt.next(container);
+        }
+        
+        else if(ua.getRole().toString().equals("Business.Role.AdminRole"))
+        {
+            logoutJButton.setEnabled(true); 
+            userNameJTextField.setEnabled(false);
+            passwordField.setEnabled(false);
+            loginJButton.setEnabled(false);
+            
+            AdminWorkAreaJPanel aw = new AdminWorkAreaJPanel(container,ua,system);
+            container.add("RestaurantAdmin",aw);
+            CardLayout crdLyt = (CardLayout) container.getLayout();
+            crdLyt.next(container);
+        }
+        
+
+        else if(ua.getRole().toString().equals("Business.Role.DeliverManRole"))
+        {
+            logoutJButton.setEnabled(true); 
+            userNameJTextField.setEnabled(false);
+            passwordField.setEnabled(false);
+            loginJButton.setEnabled(false);
+            
+            OrdersDelivery dw = new OrdersDelivery(container, ua, system);
+            container.add("DeliveryMan",dw);
+            CardLayout crdLyt = (CardLayout) container.getLayout();
+            crdLyt.next(container);
+        }
+        
+        else if(ua.getRole().toString().equals("Business.Role.CustomerRole"))
+        {
+            logoutJButton.setEnabled(true); 
+            userNameJTextField.setEnabled(false);
+            passwordField.setEnabled(false);
+            loginJButton.setEnabled(false);
+            
+            CustomerRestaurantOrder ca = new CustomerRestaurantOrder(container, ua,system);
+            container.add("Customer",ca);
+            CardLayout crdLyt = (CardLayout) container.getLayout();
+            crdLyt.next(container);
+        }
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Invalid credentials");
+        }
+      
     }//GEN-LAST:event_loginJButtonActionPerformed
 
     private void logoutJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutJButtonActionPerformed
